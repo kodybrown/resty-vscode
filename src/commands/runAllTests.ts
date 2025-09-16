@@ -58,6 +58,16 @@ export class RunAllTestsCommand {
               return;
             }
 
+            // Handle CLI errors (dependency resolution errors)
+            if (result.exitCode === 3) {
+              ErrorHandler.showValidationError('Missing test dependency: ' + result.stderr.trim());
+              return;
+            }
+            if (result.exitCode === 4) {
+              ErrorHandler.showValidationError('Circular test dependency: ' + result.stderr.trim());
+              return;
+            }
+
             // Display results
             progress.report({ message: 'Displaying results...' });
             await ResultDisplayManager.displayResults(

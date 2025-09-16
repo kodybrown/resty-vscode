@@ -188,10 +188,10 @@ expect:
 ### Running Individual Tests
 
 When you run a single test (`Ctrl+Alt+R`):
-1. **Variables/Include blocks** that appear before the test run first (in file order)
-2. **Required dependencies** run next (resolved recursively)
-3. **Target test** runs last
-4. Variables are preserved between all blocks, so auth tokens flow correctly
+1. The extension delegates dependency resolution to the Resty CLI
+2. The CLI automatically includes all required dependencies
+3. Variables are preserved between all blocks, so auth tokens flow correctly
+4. Clear error messages are shown for missing or circular dependencies
 
 ### Running All Tests
 

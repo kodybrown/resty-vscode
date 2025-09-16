@@ -6,7 +6,6 @@ export interface YamlBlock {
   isValid: boolean;
   hasTestKey: boolean;
   blockType: 'test' | 'variables' | 'include';
-  requires?: string[];
 }
 
 export interface ValidationResult {
@@ -42,8 +41,5 @@ export enum ErrorType {
   INVALID_TEST = 'INVALID_TEST',
   INVALID_FILE = 'INVALID_FILE',
   BINARY_NOT_FOUND = 'BINARY_NOT_FOUND',
-  EXECUTION_FAILED = 'EXECUTION_FAILED',
-  CIRCULAR_DEPENDENCY = 'CIRCULAR_DEPENDENCY',
-  MISSING_DEPENDENCY = 'MISSING_DEPENDENCY',
-  DEPENDENCY_FAILED = 'DEPENDENCY_FAILED'
+  EXECUTION_FAILED = 'EXECUTION_FAILED'
 }

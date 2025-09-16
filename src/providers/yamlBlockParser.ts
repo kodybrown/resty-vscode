@@ -46,7 +46,6 @@ export class YamlBlockParser {
     let hasTestKey = false;
     let isValid = false;
     let blockType: 'test' | 'variables' | 'include' = 'test';
-    let requires: string[] | undefined;
 
     try {
       const parsed = yaml.load(content);
@@ -70,15 +69,6 @@ export class YamlBlockParser {
           isValid = httpMethods.some(method => method in obj);
         }
 
-        // Parse requires field
-        if ('requires' in obj) {
-          const requiresValue = obj.requires;
-          if (typeof requiresValue === 'string') {
-            requires = [requiresValue];
-          } else if (Array.isArray(requiresValue)) {
-            requires = requiresValue.filter(item => typeof item === 'string');
-          }
-        }
       }
     } catch (error) {
       // Invalid YAML - isValid remains false
@@ -91,8 +81,7 @@ export class YamlBlockParser {
       testName,
       isValid,
       hasTestKey,
-      blockType,
-      requires
+      blockType
     };
   }
 

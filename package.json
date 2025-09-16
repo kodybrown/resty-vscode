@@ -2,7 +2,7 @@
   "name": "resty-vscode",
   "displayName": "Resty - REST API Testing",
   "description": "Run Resty API tests directly from VSCode with markdown-based test files",
-  "version": "0.1.250916",
+  "version": "0.2.250916",
   "publisher": "kodybrown",
   "repository": {
     "type": "git",

@@ -19,6 +19,23 @@ export class RestyExecutor {
     const executablePath = this.resolveExecutablePath();
     const args = this.buildArguments(filePath, outputFormat);
 
+    return this.executeProcess(executablePath, args, filePath);
+  }
+
+  /**
+   * Executes a specific test in a Resty file (with dependency resolution)
+   */
+  async executeRestyWithTest(filePath: string, testName: string, outputFormat?: string): Promise<ExecutionResult> {
+    const executablePath = this.resolveExecutablePath();
+    const args = this.buildTestArguments(filePath, testName, outputFormat);
+
+    return this.executeProcess(executablePath, args, filePath);
+  }
+
+  /**
+   * Common process execution logic
+   */
+  private executeProcess(executablePath: string, args: string[], filePath: string): Promise<ExecutionResult> {
     return new Promise((resolve, reject) => {
       const childProcess = spawn(executablePath, args, {
         cwd: path.dirname(filePath),
@@ -96,6 +113,21 @@ export class RestyExecutor {
    */
   private buildArguments(filePath: string, outputFormat?: string): string[] {
     const args = [filePath];
+
+    // Add output format if specified and not default
+    const format = outputFormat || this.config.defaultOutputFormat;
+    if (format && format !== 'markdown') {
+      args.push('-o', format);
+    }
+
+    return args;
+  }
+
+  /**
+   * Builds command line arguments for running a specific test
+   */
+  private buildTestArguments(filePath: string, testName: string, outputFormat?: string): string[] {
+    const args = [filePath, '-t', testName];
 
     // Add output format if specified and not default
     const format = outputFormat || this.config.defaultOutputFormat;

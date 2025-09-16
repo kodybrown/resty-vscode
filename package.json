@@ -1,0 +1,120 @@
+{
+  "name": "resty-vscode",
+  "displayName": "Resty - REST API Testing",
+  "description": "Run Resty API tests directly from VSCode with markdown-based test files",
+  "version": "0.1.0",
+  "publisher": "kodybrown",
+  "engines": {
+    "vscode": "^1.74.0"
+  },
+  "categories": [
+    "Testing",
+    "Other"
+  ],
+  "keywords": [
+    "REST",
+    "API",
+    "testing",
+    "HTTP",
+    "markdown",
+    "yaml"
+  ],
+  "activationEvents": [
+    "onLanguage:markdown"
+  ],
+  "main": "./out/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "resty.runCurrentTest",
+        "title": "Run Current Test",
+        "category": "Resty",
+        "icon": "$(play)"
+      },
+      {
+        "command": "resty.runAllTests",
+        "title": "Run All Tests in File",
+        "category": "Resty",
+        "icon": "$(play)"
+      }
+    ],
+    "keybindings": [
+      {
+        "key": "ctrl+alt+r",
+        "command": "resty.runCurrentTest",
+        "when": "editorLangId == markdown && resourceExtname =~ /\\.(resty|rest)$/"
+      },
+      {
+        "key": "ctrl+shift+alt+r",
+        "command": "resty.runAllTests",
+        "when": "editorLangId == markdown && resourceExtname =~ /\\.(resty|rest)$/"
+      }
+    ],
+    "menus": {
+      "editor/context": [
+        {
+          "command": "resty.runCurrentTest",
+          "when": "editorLangId == markdown && resourceExtname =~ /\\.(resty|rest)$/",
+          "group": "resty@1"
+        },
+        {
+          "command": "resty.runAllTests",
+          "when": "editorLangId == markdown && resourceExtname =~ /\\.(resty|rest)$/",
+          "group": "resty@1"
+        }
+      ]
+    },
+    "configuration": {
+      "title": "Resty",
+      "properties": {
+        "resty.executablePath": {
+          "type": "string",
+          "default": "resty",
+          "description": "Path to Resty executable (use 'resty' if in PATH)"
+        },
+        "resty.defaultOutputFormat": {
+          "type": "string",
+          "enum": [
+            "markdown",
+            "json",
+            "xml",
+            "html"
+          ],
+          "default": "markdown",
+          "description": "Default output format when running tests (default 'markdown')"
+        },
+        "resty.showOutputOnRun": {
+          "type": "boolean",
+          "default": true,
+          "description": "Automatically show output panel when running tests (default true)"
+        },
+        "resty.autoCloseOldResults": {
+          "type": "boolean",
+          "default": false,
+          "description": "Automatically close previous result tabs when running new tests (default false)"
+        },
+        "resty.tempFileCleanup": {
+          "type": "boolean",
+          "default": true,
+          "description": "Clean up temporary files after test execution (default true)"
+        }
+      }
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "pretest": "npm run compile",
+    "test": "echo \"No tests specified\""
+  },
+  "devDependencies": {
+    "@types/vscode": "^1.74.0",
+    "@types/node": "16.x",
+    "@types/js-yaml": "^4.0.5",
+    "typescript": "^4.9.4"
+  },
+  "dependencies": {
+    "js-yaml": "^4.1.0"
+  }
+}

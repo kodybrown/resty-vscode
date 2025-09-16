@@ -3,6 +3,9 @@ Notes.md
 *.notes
 *.todo
 
+# Built files
+*.vsix
+
 # Private/sensitive files
 *.private.yaml
 *.private.yml

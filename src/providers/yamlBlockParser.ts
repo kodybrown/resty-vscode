@@ -39,12 +39,14 @@ export class YamlBlockParser {
   }
 
   /**
-   * Parses YAML content and determines if it's a valid test block
+   * Parses YAML content and determines block type and validity
    */
   private parseYamlContent(content: string, startLine: number, endLine: number): YamlBlock {
     let testName: string | undefined;
     let hasTestKey = false;
     let isValid = false;
+    let blockType: 'test' | 'variables' | 'include' = 'test';
+    let requires: string[] | undefined;
 
     try {
       const parsed = yaml.load(content);
@@ -54,9 +56,29 @@ export class YamlBlockParser {
         hasTestKey = 'test' in obj;
         testName = obj.test;
 
-        // Valid if has test key and at least one HTTP method
-        const httpMethods = ['get', 'post', 'put', 'patch', 'delete', 'head', 'options'];
-        isValid = hasTestKey && httpMethods.some(method => method in obj);
+        // Determine block type
+        if ('include' in obj) {
+          blockType = 'include';
+          isValid = true; // Include blocks are always valid if they parse
+        } else if ('variables' in obj) {
+          blockType = 'variables';
+          isValid = true; // Variables blocks are always valid if they parse
+        } else if (hasTestKey) {
+          blockType = 'test';
+          // Valid if has test key and at least one HTTP method
+          const httpMethods = ['get', 'post', 'put', 'patch', 'delete', 'head', 'options'];
+          isValid = httpMethods.some(method => method in obj);
+        }
+
+        // Parse requires field
+        if ('requires' in obj) {
+          const requiresValue = obj.requires;
+          if (typeof requiresValue === 'string') {
+            requires = [requiresValue];
+          } else if (Array.isArray(requiresValue)) {
+            requires = requiresValue.filter(item => typeof item === 'string');
+          }
+        }
       }
     } catch (error) {
       // Invalid YAML - isValid remains false
@@ -68,7 +90,9 @@ export class YamlBlockParser {
       content,
       testName,
       isValid,
-      hasTestKey
+      hasTestKey,
+      blockType,
+      requires
     };
   }
 
@@ -113,7 +137,8 @@ export class YamlBlockParser {
         const content = lines.slice(blockStart + 1, i).join('\n');
         const block = this.parseYamlContent(content, blockStart, i);
 
-        if (block.hasTestKey) {
+        // Include all valid blocks (test, variables, and include blocks)
+        if (block.isValid) {
           blocks.push(block);
         }
 

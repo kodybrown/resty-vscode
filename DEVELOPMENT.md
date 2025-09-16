@@ -115,8 +115,8 @@ code .
 
 1. **Open a test file**: Create or open a `.resty` or `.rest` file
 2. **Test commands**:
-   - `Ctrl+R` - Run Current Test
-   - `Ctrl+Shift+R` - Run All Tests
+   - `Ctrl+Alt+R` - Run Current Test
+   - `Ctrl+Shift+Alt+R` - Run All Tests
 3. **Check status bar**: Should show dynamic context
 4. **Verify settings**: Go to Settings and search for "resty"
 

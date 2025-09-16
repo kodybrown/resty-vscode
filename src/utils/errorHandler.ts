@@ -18,6 +18,12 @@ export class ErrorHandler {
           vscode.commands.executeCommand('workbench.action.openSettings', 'resty.executablePath');
         }
       });
+    } else if (errorMessage.includes(ErrorType.CIRCULAR_DEPENDENCY)) {
+      vscode.window.showErrorMessage(`Circular dependency detected: ${this.extractErrorMessage(errorMessage)}`);
+    } else if (errorMessage.includes(ErrorType.MISSING_DEPENDENCY)) {
+      vscode.window.showErrorMessage(`Missing dependency: ${this.extractErrorMessage(errorMessage)}`);
+    } else if (errorMessage.includes(ErrorType.DEPENDENCY_FAILED)) {
+      vscode.window.showErrorMessage(`Dependency test failed: ${this.extractErrorMessage(errorMessage)}`);
     } else if (errorMessage.includes(ErrorType.EXECUTION_FAILED)) {
       vscode.window.showErrorMessage(`Resty execution failed: ${this.extractErrorMessage(errorMessage)}`);
     } else if (errorMessage.includes('exit code')) {
@@ -52,7 +58,10 @@ export class ErrorHandler {
       .replace(new RegExp(`^${ErrorType.INVALID_TEST}:\\s*`), '')
       .replace(new RegExp(`^${ErrorType.NOT_TEST_BLOCK}:\\s*`), '')
       .replace(new RegExp(`^${ErrorType.NO_YAML_BLOCK}:\\s*`), '')
-      .replace(new RegExp(`^${ErrorType.INVALID_FILE}:\\s*`), '');
+      .replace(new RegExp(`^${ErrorType.INVALID_FILE}:\\s*`), '')
+      .replace(new RegExp(`^${ErrorType.CIRCULAR_DEPENDENCY}:\\s*`), '')
+      .replace(new RegExp(`^${ErrorType.MISSING_DEPENDENCY}:\\s*`), '')
+      .replace(new RegExp(`^${ErrorType.DEPENDENCY_FAILED}:\\s*`), '');
 
     return cleanMessage.trim();
   }

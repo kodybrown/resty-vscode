@@ -2,6 +2,12 @@
 
 Run [Resty](https://github.com/kodybrown/resty) API tests directly from VSCode with beautiful markdown-formatted results.
 
+## Requirements
+
+- [Resty CLI tool](https://github.com/kodybrown/resty) must be installed and available in your system PATH or configured via the `resty.executablePath` setting.
+- VSCode 1.74.0 or higher
+
+
 ## Features
 
 ✨ **Smart Test Detection** - Automatically detects YAML test blocks in `.resty` and `.rest` files

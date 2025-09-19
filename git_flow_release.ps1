@@ -6,49 +6,48 @@
 
 $env:GIT_EDITOR='Notepad2.exe'
 
-# make sure there are no uncommitted changes
+# Make sure there are no uncommitted changes.
 git status
-
 git fetch
 
-# the ${main_branch} branch must be up-to-date.
+# The ${main_branch} must be up-to-date.
 git switch ${main_branch}
 git pull
 git status
 
-# release must be done from the ${dev_branch} branch
+# The release must be done from the ${dev_branch}.
 git switch ${dev_branch}
 
-# the ${dev_branch} branch must be up-to-date, also.
+# The ${dev_branch} must be up-to-date, also.
 git pull
 git status
 
-# start the release
+# Start the release.
 git flow release start "v${version}"
 
-# before continuing, update project version.
+# Update project file(s) versions (Version, AssemblyVersion, FileVersion, and InformationalVersion).
 fsr.exe -regex -file 'package.json' -find '"version": "(\d+)\.(\d+)\.(\d+)",' -replace '"version": "${version}",'
 
-# view the changed (project) files
+# Verify the changed files.
 git status
 
-# add and commit the package.json file (version) changes
+# Add and commit the package.json file changes
 git add .
 git commit -m "Updated project version to v${version}."
 
-# complete the release (will ask for a description)
+# Complete the release (will ask for a description).
 git flow release finish "v${version}"
 
-# push the changes and tags (currently in ${dev_branch} branch)
+# Push the changes and tags (currently in ${dev_branch}).
 git push
 git push --tags
 
-# push the ${main_branch} branch
+# Push the ${main_branch}.
 git switch ${main_branch}
 git push
 
-# Build the the release files!
+# PUBLISH from the ${main_branch}!
 vsce package
 
-# go back to the ${dev_branch} branch
+# Go back to the ${dev_branch}.
 git switch ${dev_branch}
